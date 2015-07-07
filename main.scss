@@ -22,6 +22,10 @@
 	}
 }
 
+.o-expander__content[aria-hidden="true"] {
+	display: none;
+}
+
 .o-expander__toggle {
 	font-family: oFontsGetFontFamilyWithFallbacks(BentonSans);
 	font-weight: normal;
@@ -47,7 +51,8 @@
 }
 
 .o-expander__toggle i,
-.o-expander__toggle[aria-expanded="true"] i {
+.o-expander__toggle[aria-expanded="true"] i,
+.o-expander__toggle[aria-pressed="true"] i {
 	@extend %o-ft-icons-icon--arrow-up;
 }
 

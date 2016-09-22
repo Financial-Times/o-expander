@@ -92,11 +92,7 @@ const Expander = function (el, opts) {
 
 	this.configure('shrinkTo', 'height');
 	this.configure('countSelector', '.' + this.contentClassName + ' > li');
-	if(this.el.querySelector('button.' + this.toggleClassName)) {
-		this.configure('toggleSelector', 'button.' + this.toggleClassName);
-	} else {
-		this.configure('toggleSelector', 'a.' + this.toggleClassName);
-	}
+	this.configure('toggleSelector', '.' + this.toggleClassName);
 	this.configure('toggleState', 'all');
 	this.configure('accordion', false);
 	this.accordion = Boolean(this.opts.accordion);
@@ -130,8 +126,8 @@ const Expander = function (el, opts) {
 		this.toggleArray = [].slice.apply(this.toggleArray);
 	}
 
-	if (!this.toggles.length && !this.toggleArray.length && !this.accordion) {
-		throw new Error('o-expander needs a toggle link (use a link not a button)');
+	if (!this.toggles.length) {
+		throw new Error('o-expander needs a toggle link or button');
 	}
 	this.ariaToggles();
 

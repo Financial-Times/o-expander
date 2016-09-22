@@ -36,6 +36,7 @@ All the following can be passed in an options object in the second parameter of 
 * `rootClassName` [`'o-expander'`]: Class name used in the root element of the component
 * `contentClassName` [`'o-expander__content'`]: Class name used in the content element of the component
 * `toggleClassName` [`'o-expander__toggle'`]: Class name used in the toggle element of the component
+* `accordion` [`'true'`]: Class name used to indicate an accordion behaviour. Each section of the list is indicated with `span`. There is a full example of its use on the [accordion demo](https://github.com/Financial-Times/o-expander/blob/accordion/demos/src/accordion.mustache).
 
 ## Events
 o-expander fires the following events, which always fire before any repainting/layout occurs

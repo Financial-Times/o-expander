@@ -126,7 +126,7 @@ const Expander = function (el, opts) {
 		this.toggleArray = [].slice.apply(this.toggleArray);
 	}
 
-	if (!this.toggles.length) {
+	if (!this.toggles.length && !this.toggleArray.length) {
 		throw new Error('o-expander needs a toggle link or button');
 	}
 	this.ariaToggles();

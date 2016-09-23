@@ -121,9 +121,9 @@ const Expander = function (el, opts) {
 	this.contentEl = this.el.querySelector('.' + this.contentClassName);
 
 	if(!this.accordion) {
-		this.toggles = [].slice.apply(this.el.querySelectorAll(this.opts.toggleSelector));
+		this.toggles = Array.from(this.el.querySelectorAll(this.opts.toggleSelector));
 	} else {
-		this.toggleArray = [].slice.apply(this.toggleArray);
+		this.toggleArray = Array.from(this.toggleArray);
 	}
 
 	if (!this.toggles.length && !this.toggleArray.length) {

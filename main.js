@@ -176,7 +176,6 @@ Expander.prototype.apply = function (isSilent) {
 			[].slice.call(this.el.querySelectorAll(this.opts.countSelector), this.opts.shrinkTo)
 				// The class is added via JS, so it can use the default name
 				.forEach(el => {
-					// not sure if i should be compared with the index of an element with a 'data-id' attribute instead of a 'parentNode'
 					if(!this.accordion || (Array.prototype.indexOf.call(el.parentNode.children, el) >= this.opts.shrinkTo)) {
 						el.classList.add('o-expander__collapsible-item');
 					}
@@ -227,13 +226,19 @@ Expander.prototype.invertState = function () {
 Expander.prototype.accordionInvertState = function (el) {
 	const trigger = el.getAttribute('data-expand-id');
 	const elem = this.el.querySelector(`[data-id~="${trigger}"]`);
-	this.isCollapsed(elem) ? this.expand(false, elem) : this.collapse(false, elem);
+	this.isCollapsed(elem) ? this.expandAccordion(false, elem) : this.collapse(false, elem);
 };
 
 Expander.prototype.displayState = function (isSilent) {
 	this.isCollapsed() ? this.collapse(isSilent) : this.expand(isSilent);
 };
 
+Expander.prototype.expandAccordion = function (isSilent, elem) {
+	this.contentEl.querySelectorAll('[data-id]').forEach(el => {
+		if (el !== elem) this.collapse(isSilent, el);
+	});
+	this.expand(isSilent, elem);
+};
 
 Expander.prototype.expand = function (isSilent, elem) {
 	this.toggleExpander('expand', isSilent, elem);

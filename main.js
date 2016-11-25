@@ -5,17 +5,24 @@ let count = 0;
 
 
 const expandMethods = {
-	toggleContent: function (state) {
+	toggleAccordionContent: function (state) {
+		this.contentEl.querySelectorAll('[data-id]').forEach(el => {
+			this.toggleContent(state, el);
+		});
+	},
+	toggleContent: function (state, elem) {
+		const el = elem || this.contentEl;
 		if (state === 'expand') {
-			this.contentEl.classList.add(this.contentClassName + '--expanded');
-			this.contentEl.classList.remove(this.contentClassName + '--collapsed');
+			el.classList.add(this.contentClassName + '--expanded');
+			el.classList.remove(this.contentClassName + '--collapsed');
 		} else {
-			this.contentEl.classList.remove(this.contentClassName + '--expanded');
-			this.contentEl.classList.add(this.contentClassName + '--collapsed');
+			el.classList.remove(this.contentClassName + '--expanded');
+			el.classList.add(this.contentClassName + '--collapsed');
 		}
 	},
-	hasStateDefined: function () {
-		return this.contentEl.classList.contains(this.contentClassName + '--expanded') || this.contentEl.classList.contains(this.contentClassName + '--collapsed');
+	hasStateDefined: function (elem) {
+		const el = elem || this.contentEl;
+		return el.classList.contains(el.contentClassName + '--expanded') || el.classList.contains(el.contentClassName + '--collapsed');
 	},
 	isRequired: function () {
 		let overflows = false;
@@ -34,17 +41,24 @@ const expandMethods = {
 		}
 		return overflows;
 	},
-	isCollapsed: function () {
-		return !this.contentEl.classList.contains(this.contentClassName + '--expanded');
+	isCollapsed: function (elem) {
+		const el = elem || this.contentEl;
+		return !el.classList.contains(this.contentClassName + '--expanded');
 	}
 };
 
 const hiderMethods = {
-	toggleContent: function (state) {
+	toggleAccordionContent: function (state) {
+		this.contentEl.querySelectorAll('[data-id]').forEach(el => {
+			this.toggleContent(state, el);
+		});
+	},
+	toggleContent: function (state, elem) {
+		const el = elem || this.contentEl;
 		if (state === 'expand') {
-			this.contentEl.setAttribute('aria-hidden', 'false');
+			el.setAttribute('aria-hidden', 'false');
 		} else {
-			this.contentEl.setAttribute('aria-hidden', 'true');
+			el.setAttribute('aria-hidden', 'true');
 		}
 	},
 	hasStateDefined: function () {
@@ -53,8 +67,9 @@ const hiderMethods = {
 	isRequired: function () {
 		return true;
 	},
-	isCollapsed: function () {
-		return this.contentEl.getAttribute('aria-hidden') === 'true';
+	isCollapsed: function (elem) {
+		const el = elem || this.contentEl;
+		return el.getAttribute('aria-hidden') === 'true';
 	}
 };
 
@@ -68,6 +83,8 @@ function mixin(target, methods) {
 const Expander = function (el, opts) {
 	this.opts = opts || {};
 	this.el = el;
+	this.toggleArray = [];
+	this.toggles = [];
 
 	this.className = this.opts.className || rootClassName;
 	this.contentClassName = this.opts.contentClassName || rootClassName + '__content';
@@ -75,11 +92,17 @@ const Expander = function (el, opts) {
 
 	this.configure('shrinkTo', 'height');
 	this.configure('countSelector', '.' + this.contentClassName + ' > li');
-	this.configure('expandedToggleText', this.opts.shrinkTo === 'hidden' ? 'hide' : this.opts.shrinkTo === 'height' ? 'less' : 'fewer');
-	this.configure('collapsedToggleText', this.opts.shrinkTo === 'hidden' ? 'show' : 'more');
 	this.configure('toggleSelector', '.' + this.toggleClassName);
 	this.configure('toggleState', 'all');
+	this.configure('accordion', false);
+	this.accordion = Boolean(this.opts.accordion);
 
+	if(!this.accordion) {
+		this.configure('expandedToggleText', this.opts.shrinkTo === 'hidden' ? 'hide' : this.opts.shrinkTo === 'height' ? 'less' : 'fewer');
+		this.configure('collapsedToggleText', this.opts.shrinkTo === 'hidden' ? 'show' : 'more');
+	} else {
+		this.toggleArray = this.el.querySelectorAll('.o-expander__content a');
+	}
 
 	if (/^\d+$/.test(this.opts.shrinkTo)) {
 		this.opts.shrinkTo = +this.opts.shrinkTo;
@@ -97,9 +120,13 @@ const Expander = function (el, opts) {
 
 	this.contentEl = this.el.querySelector('.' + this.contentClassName);
 
-	this.toggles = [].slice.apply(this.el.querySelectorAll(this.opts.toggleSelector));
+	if(!this.accordion) {
+		this.toggles = Array.from(this.el.querySelectorAll(this.opts.toggleSelector));
+	} else {
+		this.toggleArray = Array.from(this.toggleArray);
+	}
 
-	if (!this.toggles.length) {
+	if (!this.toggles.length && !this.toggleArray.length) {
 		throw new Error('o-expander needs a toggle link or button');
 	}
 	this.ariaToggles();
@@ -111,9 +138,20 @@ const Expander = function (el, opts) {
 		document.body.addEventListener('oViewport.resize', () => this.apply());
 	}
 
-	this.toggles.forEach(toggle => {
-		toggle.addEventListener('click', () => this.invertState());
-	});
+	if(!this.accordion) {
+		this.toggles.forEach(toggle => {
+			toggle.addEventListener('click', () => {
+			return this.invertState();
+			});
+		});
+	} else {
+		this.toggleArray.forEach(toggle => {
+			toggle.addEventListener('click', (event) => {
+				return this.accordionInvertState(event.target);
+			});
+		});
+	}
+
 	this.el.setAttribute('data-o-expander-js', '');
 	this.apply(true);
 	this.emit('init');
@@ -137,7 +175,11 @@ Expander.prototype.apply = function (isSilent) {
 		if (typeof this.opts.shrinkTo === 'number') {
 			[].slice.call(this.el.querySelectorAll(this.opts.countSelector), this.opts.shrinkTo)
 				// The class is added via JS, so it can use the default name
-				.forEach(el => el.classList.add('o-expander__collapsible-item'));
+				.forEach(el => {
+					if(!this.accordion || (Array.prototype.indexOf.call(el.parentNode.children, el) >= this.opts.shrinkTo)) {
+						el.classList.add('o-expander__collapsible-item');
+					}
+				});
 		}
 		if (this.hasStateDefined()) {
 			this.displayState(isSilent);
@@ -181,25 +223,37 @@ Expander.prototype.invertState = function () {
 	this.isCollapsed() ? this.expand() : this.collapse();
 };
 
+Expander.prototype.accordionInvertState = function (el) {
+	const trigger = el.getAttribute('data-expand-id');
+	const elem = this.el.querySelector(`[data-id~="${trigger}"]`);
+	this.isCollapsed(elem) ? this.expandAccordion(false, elem) : this.collapse(false, elem);
+};
+
 Expander.prototype.displayState = function (isSilent) {
 	this.isCollapsed() ? this.collapse(isSilent) : this.expand(isSilent);
 };
 
-
-Expander.prototype.expand = function (isSilent) {
-	this.toggleExpander('expand', isSilent);
+Expander.prototype.expandAccordion = function (isSilent, elem) {
+	this.contentEl.querySelectorAll('[data-id]').forEach(el => {
+		if (el !== elem) this.collapse(isSilent, el);
+	});
+	this.expand(isSilent, elem);
 };
 
-Expander.prototype.collapse = function (isSilent) {
-	this.toggleExpander('collapse', isSilent);
+Expander.prototype.expand = function (isSilent, elem) {
+	this.toggleExpander('expand', isSilent, elem);
+};
+
+Expander.prototype.collapse = function (isSilent, elem) {
+	this.toggleExpander('collapse', isSilent, elem);
 };
 
 Expander.prototype.emit = function (name) {
 	this.el.dispatchEvent(new CustomEvent('oExpander.' + name, {bubbles: true}));
 };
 
-Expander.prototype.toggleExpander = function (state, isSilent) {
-	this.toggleContent(state);
+Expander.prototype.toggleExpander = function (state, isSilent, elem) {
+	(this.accordion && !elem) ? this.toggleAccordionContent(state) : this.toggleContent(state, elem);
 	if (this.opts.toggleState !== 'none') {
 		this.toggles.forEach(toggle => {
 			if (this.opts.toggleState !== 'aria') {

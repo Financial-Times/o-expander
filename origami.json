@@ -26,6 +26,12 @@
 			"js": "demos/src/demo.js"
 		},
 		{
+			"name": "Accordion",
+			"description": "Accordion behavour of the component",
+			"template": "demos/src/accordion.mustache",
+			"js": "demos/src/demo.js"
+		},
+		{
 			"name": "Variants",
 			"description": "More advanced configurations of the module",
 			"template": "demos/src/variants.mustache",

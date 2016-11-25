@@ -53,7 +53,52 @@ function simple () {
 	insert(html);
 }
 
+function accordion () {
+	const html = `
+	<div data-o-component="o-expander" class="o-expander items" data-o-expander-shrink-to="3" data-o-expander-count-selector="li">
+		<h2>Simple List</h2>
+		<ul class="o-expander__content">
+			<li>item</li>
+			<li>item</li>
+			<li>item</li>
+			<li>item</li>
+		</ul>
+		<a href='#' class="o-expander__toggle o--if-js click-for-testing"></a>
+	</div>
+
+	<div data-o-component="o-expander" class="o-expander items" data-o-expander-shrink-to="2" data-o-expander-count-selector="li" data-o-expander-accordion="true">
+		<h2>Accordion behaviour</h2>
+		<div class="o-expander__content">
+			<a href='#' class="o-expander__toggle o--if-js" data-expand-id="list-1">List 1</a>
+			<ul class="o-expander__content" data-id="list-1">
+				<li>item1</li>
+				<li>item2</li>
+				<li>item3</li>
+			</ul>
+			<a href='#' class="o-expander__toggle o--if-js" data-expand-id="list-2">List 2</a>
+			<ul class="o-expander__content" data-id="list-2">
+				<li>item4</li>
+				<li>item5</li>
+				<li>item6</li>
+				<li>item7</li>
+				<li>item8</li>
+				<li>item9</li>
+				<li>item10</li>
+			</ul>
+			<a href='#' class="o-expander__toggle o--if-js" data-expand-id="list-3">List 3</a>
+			<ul class="o-expander__content" data-id="list-3">
+				<li>item11</li>
+				<li>item12</li>
+				<li>item13</li>
+			</ul>
+		</div>
+	</div>
+	`;
+	insert(html);
+}
+
 export {
 	simple,
+	accordion,
 	reset
 };

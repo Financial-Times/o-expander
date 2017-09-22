@@ -58,7 +58,7 @@ o-expander fires the following events, which always fire before any repainting/l
     }
     ```
 
-  * Animation and other fancy behaviour can be added using css and by listening to events. See the demos for examples
+  * Animation and other fancy behaviour can be added using css and by listening to the events outlined above.
 
 ### Options
 

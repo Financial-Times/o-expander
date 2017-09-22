@@ -40,16 +40,9 @@
 			"template": "demos/src/toggle.mustache"
 		},
 		{
-			"name": "Custom Variants",
-			"description": "Different behaviour and visuals using events and custom styling.",
-			"template": "demos/src/variants.mustache",
-			"js": "demos/src/variants.js"
-		},
-		{
 			"name": "pa11y",
 			"description": "Several use cases to test accessibility",
 			"template": "demos/src/pa11y.mustache",
-			"js": "demos/src/variants.js",
 			"hidden": true
 		}
 	]

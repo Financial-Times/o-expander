@@ -114,6 +114,9 @@ const Expander = function (el, opts) {
 	this.toggles.forEach(toggle => {
 		toggle.addEventListener('click', () => this.invertState());
 	});
+	this.el.addEventListener('oExpander.forceCollapse', () => {
+		this.collapse();
+	});
 	this.el.setAttribute('data-o-expander-js', '');
 	this.apply(true);
 	this.emit('init');

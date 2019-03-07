@@ -1,6 +1,6 @@
 /* eslint-env mocha, sinon, proclaim */
-import proclaim from 'proclaim';
-import * as fixtures from './helpers/fixtures';
+const proclaim = require('proclaim');
+const fixtures = require('./helpers/fixtures');
 
 const Expander = require('./../main');
 

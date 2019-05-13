@@ -1,5 +1,6 @@
 {
-	"description": "Accessible, content-aware widget for expanding and collapsing content",
+	"description": "This is an accessible and content-aware component to aid products in expanding and collapsing content.",
+	"keywords": [ "expand", "content", "more", "less" ],
 	"origamiVersion": 1,
 	"origamiCategory": "utilities",
 	"origamiType": "module",

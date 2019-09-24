@@ -10,7 +10,7 @@ class Expander {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 */
 	constructor (oExpanderElement, opts) {
-		// Set expander set.
+		// Set expander state.
 		// 'expanded', 'collapsed', or 'null';
 		this._currentState = null;
 

@@ -22,10 +22,10 @@ class Expander {
 			toggleSelector: '.o-expander__toggle',
 		}, opts || Expander._getDataAttributes(oExpanderElement));
 
-		// If the user has configured the expand toggle text, choose the text
-		// based on the "shrinkTo" configuration: "hide" when shrinking by
-		// hiding collaposed items; "less" when shrinkng by height; "fewer" when
-		// shrinking to a count of elements.
+		// If the user has not configured toggle text for the expanded state,
+		// set it based on the "shrinkTo" option: "hide" when hiding collapsed
+		// items; "less" when obscuring by reducing the container height by a
+		// given value; "fewer" otherwise.
 		if (!this.options.expandedToggleText) {
 			switch (this.options.shrinkTo) {
 				case 'hidden':
@@ -39,10 +39,10 @@ class Expander {
 					break;
 			}
 		}
-		// If the user has configured the collapse toggle text, choose the text
-		// based on the "shrinkTo" configuration: "show" when shrinking by
-		// hiding collaposed items; "more" when shrinkng by height or a count of
-		// elements.
+
+		// If the user has not configured toggle text for the collapsed state,
+		// set it based on the "shrinkTo" option: "show" hiding collapsed items;
+		// or "more" when collapsing to a height.
 		if (!this.options.collapsedToggleText) {
 			this.options.collapsedToggleText = this.options.shrinkTo === 'hidden' ? 'show' : 'more';
 		}
@@ -92,7 +92,7 @@ class Expander {
 			document.body.addEventListener('oViewport.resize', () => this.apply());
 		}
 
-		// Add a data attribute to indicate the expander is initalised, which
+		// Add a data attribute to indicate the expander is initialised, which
 		// may be styled against for progressive enhancement (we shouldn't hide
 		// content when the expander fails to load).
 		this.oExpanderElement.setAttribute('data-o-expander-js', '');
@@ -110,11 +110,11 @@ class Expander {
 	 * @param {Boolean} isSilent [false] Set to true to avoid firing the `oExpander.expand` or `oExpander.collapse` events.
 	 */
 	apply (isSilent) {
-		if (!this._isToggleable()) {
-			this.oExpanderElement.classList.add('o-exapnder--inactive');
+		if (!this._isActive()) {
+			this.oExpanderElement.classList.add('o-expander--inactive');
 		} else {
 			//Remove the inactive class, this expander may be toggled.
-			this.oExpanderElement.classList.remove('o-exapnder--inactive');
+			this.oExpanderElement.classList.remove('o-expander--inactive');
 			// Mark collapsible items with the `o-expander__collapsible-item` class.
 			if (typeof this.options.shrinkTo === 'number') {
 				const allCountElements = this.oExpanderElement.querySelectorAll(this.options.countSelector);
@@ -131,8 +131,7 @@ class Expander {
 	}
 
 	/**
-	 * Toggle the expander so a collaposed expander is expanded and an expanded
-	 * expander is collapsed.
+	 * Toggle the expander so expands or, if it's already expanded, collapses.
 	 */
 	toggle () {
 		if (this.isCollapsed()) {
@@ -195,18 +194,19 @@ class Expander {
 	}
 
 	/**
-	 * Find whether the expander is toggleable or inactive.
+	 * Return whether the expander has something to hide / show.
+	 * i.e. if expanding/collapsing would do anything.
 	 * @returns {Boolean}
 	 * @access private
 	 */
-	_isToggleable() {
-		// An expander may always toggle hidable items.
+	_isActive() {
+		// An expander may always toggle an expander which hides items.
 		if (this.options.shrinkTo === 'hidden') {
 			return true;
 		}
 		// An expander based on the number of items in a container may only
-		// collapose if the items length exceeds the number to shrink to. I.e.
-		// a list of 2 can't collapose to 5.
+		// collapse if the items length exceeds the number to shrink to. I.e.
+		// a list of 2 can't collapse to 5.
 		if (typeof this.options.shrinkTo === 'number') {
 			const expandableElements = this.oExpanderElement.querySelectorAll(this.options.countSelector);
 			if (expandableElements.length > this.options.shrinkTo) {
@@ -235,7 +235,7 @@ class Expander {
 	_setExpandedState(state, isSilent) {
 		// Record the current state of the expander.
 		this._currentState = state;
-		// If not hiding elements set the expanded and collaposed classes.
+		// If not hiding elements set the expanded and collapsed classes.
 		if (this.options.shrinkTo !== 'hidden') {
 			this.contentElement.classList.toggle('o-expander--expanded', state === 'expand');
 			this.contentElement.classList.remove('o-expander--collapsed', state !== 'expand');
@@ -302,7 +302,7 @@ class Expander {
 
 	/**
 	 * Initialise the component.
-	 * @param {(HTMLElement|String)} rootElement - The root element to intialise the component in, or a CSS selector for the root element
+	 * @param {(HTMLElement|String)} rootElement - The root element to initialise the component in, or a CSS selector for the root element
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 * @returns {(Expander|Array<Expander>)} - Expander instance(s)
 	 */

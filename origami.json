@@ -6,8 +6,9 @@
 	"origamiType": "module",
 	"browserFeatures": {
 		"required": [
-			"classlist",
-			"customevent"
+			"Element.prototype.classList",
+			"Array.from",
+			"CustomEvent"
 		]
 	},
 	"brands": [

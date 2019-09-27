@@ -1,40 +1,37 @@
 # o-expander [![Build Status](https://circleci.com/gh/Financial-Times/o-expander.png?style=shield&circle-token=0342cb593ceeb278037288a5f7a4745990b9517b)](https://circleci.com/gh/Financial-Times/o-expander) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](#licence)
 
-Accessible, content-aware widget for expanding and collapsing content
+Accessible, content-aware component for expanding and collapsing content. Based on content height or number of items.
 
-- [Usage](#usage)
-	- [Markup](#markup)
-	- [JavaScript](#javascript)
-	- [Sass](#sass)
-	- [Options](#options)
+- [Markup](#markup)
+- [JavaScript](#javascript)
+- [Sass](#sass)
+- [Options](#options)
 - [Contact](#contact)
 - [Licence](#licence)
 
-## Usage
-
-### Markup
+## Markup
 
 ```html
 <div data-o-component="o-expander" class="o-expander">
     <div class="o-expander__content"></div>
-    <a class="o-expander__toggle o--if-js"></a>
+    <a class="o-expander__toggle"></a>
 </div>
 ```
 `o-expander__toggle` and `o-expander__content` can be put anywhere within `o-expander` as long as `o-expander__toggle` is not contained within `o-expander__content`. There are no restrictions on sibling markup.
 
-### JavaScript
+## JavaScript
 
-#### Static methods
+### Static methods
 
-##### `init(el, opts)`
+#### `init(el, opts)`
 This generally sticks to the [usual origami convention](http://origami.ft.com/docs/syntax/js/#initialisation). If `el` is an HTMLElement with the attribute `data-o-component="o-expander"` a single instance will be created for that element and returned, otherwise an expander will be created for each `o-expander` element found within `el`, and an array of instances returned.
 
-#### Instance methods
+### Instance methods
 
-##### `destroy()`
+#### `destroy()`
 Destroys an o-expander instance and removes all event listeners
 
-#### Events
+### Events
 
 o-expander fires the following events, which always fire before any repainting/layout occurs
 
@@ -42,7 +39,7 @@ o-expander fires the following events, which always fire before any repainting/l
   * `oExpander.expand` - fires when the expander expands
   * `oExpander.collapse` - fires when the expander collapses
 
-### Sass
+## Sass
 
   * If you want to use the default classes, turn silent mode off before importing it: `$o-expander-is-silent: false;`
   * By default o-expander will collapse content on initialisation. To prevent this add the class `.o-expander__content--expanded`
@@ -60,7 +57,7 @@ o-expander fires the following events, which always fire before any repainting/l
 
   * Animation and other fancy behaviour can be added using css and by listening to the events outlined above.
 
-### Options
+## Options
 
 All the following can be passed in an options object in the second parameter of `oExpander#init()` or as data-attributes (hyphenated and prefixed by `o-expander` e.g. `data-o-expander-shrink-to="height"`)
 

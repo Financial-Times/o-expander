@@ -17,3 +17,5 @@ The following functions are removed or now private, ensure your project doesn't 
 - `emit`
 - `hasStateDefined`
 - `isRequired`
+
+The data attribute `data-o-expander-js` has been replaced with the class `o-expander--initialised`. If your project is styling based on `[data-o-expander-js]`, update your css to use `.o-expander--initialised`.

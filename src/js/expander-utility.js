@@ -18,7 +18,7 @@ class ExpanderUtility {
 	 * @param {String} opts.selectors.content - A selector for the expanders content, which will collapse or expand e.g. `.my-expander__content`.
 	 * @param {String} opts.selectors.item - A selector for the items within the expander content e.g. `li` (required only when `shrinkTo` is set to a number).
 	 * @param {Object} opts.classnames - The classnames to apply to the expander for different states.
-	 * @param {String} opts.classnames.initialised - The class to apply to the top level of the expander when initialised by JS e.g. `.my-expander--initialised`.
+	 * @param {String} opts.classnames.initialized - The class to apply to the top level of the expander when initialised by JS e.g. `.my-expander--initialized`.
 	 * @param {String} opts.classnames.inactive - The class to apply to the top level of the expander when it can not expand or collapse e.g. `.my-expander--inactive`.
 	 * @param {String} opts.classnames.expanded - The class to apply to the expander content when it is expanded e.g. `.my-expander--expanded`.
 	 * @param {String} opts.classnames.collapsed - The class to apply to the expander content when it is collapsed JS e.g. `.my-expander--collapsed`.
@@ -68,7 +68,7 @@ class ExpanderUtility {
 		// The `collapsibleItem` class is only required if this expander is a
 		// "number" expander, i.e. based on the number of visible content items.
 		const requiredClassnames = [
-			'initialised',
+			'initialized',
 			'inactive',
 			'expanded',
 			'collapsed'
@@ -145,7 +145,7 @@ class ExpanderUtility {
 		// Add a class to indicate the expander is initialised, which
 		// may be styled against for progressive enhancement (we shouldn't hide
 		// content when the expander fails to load).
-		this.oExpanderElement.classList.add(this.options.classnames.initialised);
+		this.oExpanderElement.classList.add(this.options.classnames.initialized);
 
 		// Apply the configured expander.
 		this.apply(true);
@@ -239,7 +239,7 @@ class ExpanderUtility {
 		this.contentElement.removeAttribute('aria-hidden');
 		this.contentElement.classList.remove(this.options.classnames.expanded);
 		this.contentElement.classList.remove(this.options.classnames.collapsed);
-		this.oExpanderElement.classList.remove(this.options.classnames.initialised);
+		this.oExpanderElement.classList.remove(this.options.classnames.initialized);
 	}
 
 	/**

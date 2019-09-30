@@ -25,7 +25,7 @@ class Expander extends ExpanderUtility {
 				item: userOptions.itemSelector || 'li',
 			},
 			classnames: {
-				initialised: 'o-expander--initialised',
+				initialized: 'o-expander--initialized',
 				inactive: 'o-expander--inactive',
 				expanded: 'o-expander__content--expanded',
 				collapsed: 'o-expander__content--collapsed',

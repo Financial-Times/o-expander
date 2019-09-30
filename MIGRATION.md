@@ -6,7 +6,7 @@ To support Internet Explorer include the `Element.prototype.classList` and `Arra
 
 ### Updated DOM Attributes
 
-The data attribute `data-o-expander-js` has been replaced with the class `o-expander--initialised`. If your project is styling based on `[data-o-expander-js]`, update your css to use `.o-expander--initialised`.
+The data attribute `data-o-expander-js` has been replaced with the class `o-expander--initialized`. If your project is styling based on `[data-o-expander-js]`, update your css to use `.o-expander--initialized`.
 
 Expanders with the `shrinkTo` (`data-shrink-to`) option set to a number, to toggle a collapsing list, will now have `aria-hidden` set on collapsed items. No changes should be required.
 
@@ -26,7 +26,7 @@ The `countSelector` (`data-o-expander-count-selector`) is now `itemSelector` (`d
 
 The following options have been removed. Instead use default `o-expander` CSS selectors and styles. If you are unable to, i.e. due to custom styles or markup restrictions, use the new [Expander.createCustom](#./README.md#custom-expander) method to instantiate your expanders.
 
-- `toggleSelector` (`data-o-expander-toggle-elector`)
+- `toggleSelector` (`data-o-expander-toggle-selector`)
 - `rootClassName` (not set declaratively)
 - `contentClassName` (not set declaratively)
 - `toggleClassName` (not set declaratively)

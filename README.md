@@ -42,9 +42,9 @@ By default the expander is based on height. Set the `max-height` of your collaps
 ```css
 // Set the height to 30% the viewport width (this is for demo purposes and could
 // be any height). Only apply a max-height when the expander has the
-// `o-expander--initialised` class for progressive enhancement, so when
+// `o-expander--initialized` class for progressive enhancement, so when
 // JavaScript fails content isn't hidden.
-.o-expander--initialised.my-example-expander {
+.o-expander--initialized.my-example-expander {
   max-height: 30vh;
 }
 ```
@@ -189,7 +189,7 @@ const myCustomExpander = Expander.createCustom(myExpanderElement, {
     item: 'li', // The items within o-expander to count, when `shrinkTo` is set to a number.
   },
   classnames: {
-    initialised: 'my-expander--initialised', // Added to the expander element when JS is initialised.
+    initialized: 'my-expander--initialized', // Added to the expander element when JS is initialised.
     inactive: 'my-expander--inactive', // Added to the expander element if the expander doesn't need to contract/expand.
     expanded: 'my-expander__content--expanded', // Added to the content element when expanded.
     collapsed: 'my-expander__content--collapsed', // Added to the content element when collapsed.

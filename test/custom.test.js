@@ -18,7 +18,7 @@ describe("Expander", () => {
 					item: '.my-expander__content > li',
 				},
 				classnames: {
-					initialised: 'my-expander--initialised',
+					initialized: 'my-expander--initialized',
 					inactive: 'my-expander--inactive',
 					expanded: 'my-expander__content--expanded',
 					collapsed: 'my-expander__content--collapsed',
@@ -106,7 +106,7 @@ describe("Expander", () => {
 				);
 				// Custom initialised class applied to the expander.
 				proclaim.isTrue(
-					expanderElement.classList.contains(classnames.initialised),
+					expanderElement.classList.contains(classnames.initialized),
 					`Custom initialised class was not applied to the expander.`
 				);
 				// Custom inactive and expanded classes not applied, this test
@@ -156,7 +156,7 @@ describe("Expander", () => {
 				);
 				// Custom initialised class applied to the expander.
 				proclaim.isTrue(
-					expanderElement.classList.contains(classnames.initialised),
+					expanderElement.classList.contains(classnames.initialized),
 					`Custom initialised class was not applied to the expander.`
 				);
 				// Custom inactive and collapsed classes not applied, this test

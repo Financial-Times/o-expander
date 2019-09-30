@@ -10,6 +10,16 @@ class ExpanderUtility {
 	 * @param {Object} - An options object for configuring the component.
 	 */
 	constructor(oExpanderElement, opts) {
+		// Error if the expander element is not an element.
+		if(!(oExpanderElement instanceof Element)) {
+			throw new Error('Expected an expander Element.');
+		}
+
+		// Error if no options are given.
+		if (typeof opts !== 'object') {
+			throw new Error(`Expected an \`opts\` object, found type of "${typeof opts}".`);
+		}
+
 		// Set expander state.
 		// 'expanded', 'collapsed', or 'null';
 		this._currentState = null;
@@ -40,13 +50,17 @@ class ExpanderUtility {
 		}
 
 		// Validate the required classnames are configured.
+		// The `collapsibleItem` class is only required if this expander is a
+		// "number" expander, i.e. based on the number of visible content items.
 		const requiredClassnames = [
 			'initialised',
 			'inactive',
 			'expanded',
-			'collapsed',
-			'collapsibleItem'
+			'collapsed'
 		];
+		if (typeof this.options.shrinkTo === 'number') {
+			requiredClassnames.push(`collapsibleItem`);
+		}
 		const actualClassnames = Object.keys(opts.classnames);
 		const missingClassnames = requiredClassnames.filter(s => actualClassnames.indexOf(s) === -1);
 		if (typeof opts.selectors !== 'object' || missingClassnames.length) {
@@ -84,7 +98,7 @@ class ExpanderUtility {
 		this.toggles = [].slice.apply(this.oExpanderElement.querySelectorAll(this.options.selectors.toggle));
 		if (!this.toggles.length) {
 			throw new Error(
-				'o-expander needs a toggle link or button.' +
+				'o-expander needs a toggle link or button. ' +
 				`None were found for toggle selector "${this.options.selectors.toggle}".`
 			);
 		}
@@ -116,7 +130,7 @@ class ExpanderUtility {
 		// Add a class to indicate the expander is initialised, which
 		// may be styled against for progressive enhancement (we shouldn't hide
 		// content when the expander fails to load).
-		this.contentElement.classList.add(this.options.classnames.initialised);
+		this.oExpanderElement.classList.add(this.options.classnames.initialised);
 
 		// Apply the configured expander.
 		this.apply(true);
@@ -140,7 +154,7 @@ class ExpanderUtility {
 			if (typeof this.options.shrinkTo === 'number') {
 				const allCountElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
 				const collapsibleCountElements = Array.from(allCountElements).splice(this.options.shrinkTo);
-				collapsibleCountElements.forEach(el => el.classList.add(this.options.classnames.collapsibleItemClass));
+				collapsibleCountElements.forEach(el => el.classList.add(this.options.classnames.collapsibleItem));
 			}
 			// Collapse or expand.
 			if (this.isCollapsed()) {
@@ -211,7 +225,7 @@ class ExpanderUtility {
 		this.contentElement.removeAttribute('aria-hidden');
 		this.contentElement.classList.remove(this.options.classnames.expanded);
 		this.contentElement.classList.remove(this.options.classnames.collapsed);
-		this.contentElement.classList.remove(this.options.classnames.initialised);
+		this.oExpanderElement.classList.remove(this.options.classnames.initialised);
 	}
 
 	/**
@@ -230,9 +244,7 @@ class ExpanderUtility {
 		// a list of 2 can't collapse to 5.
 		if (typeof this.options.shrinkTo === 'number') {
 			const expandableElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
-			if (expandableElements.length > this.options.shrinkTo) {
-				return true;
-			}
+			return expandableElements.length > this.options.shrinkTo;
 		}
 		// If the expander is based on a height then check the content overflows
 		// the content container.
@@ -259,7 +271,7 @@ class ExpanderUtility {
 		// If not hiding elements set the expanded and collapsed classes.
 		if (this.options.shrinkTo !== 'hidden') {
 			this.contentElement.classList.toggle(this.options.classnames.expanded, state === 'expand');
-			this.contentElement.classList.remove(this.options.classnames.collapsed, state !== 'expand');
+			this.contentElement.classList.toggle(this.options.classnames.collapsed, state !== 'expand');
 		}
 		// If hiding elements set `aria-hidden`.
 		if (this.options.shrinkTo === 'hidden') {

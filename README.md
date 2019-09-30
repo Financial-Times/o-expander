@@ -31,6 +31,7 @@ By default the expander is based on height. Set the `max-height` of your collaps
 ```diff
 -<div data-o-component="o-expander" class="o-expander">
 +<div data-o-component="o-expander" class="o-expander my-example-expander">
+    <h2>Collapsing content based on its height</h2>
     <div class="o-expander__content">
       <!-- Some content to expand and collapse. -->
     </div>
@@ -55,7 +56,7 @@ The expander may also be based on the number of items within `o-expander__conten
 ```diff
 -	<div data-o-component="o-expander" class="o-expander">
 +	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2">
-		<h2>Collapsing to number of items in a list</h2>
+		<h2>Collapsing content to a number of items in a list</h2>
 		<ul class="o-expander__content">
 			<li>item</li>
 			<li>item</li>
@@ -72,7 +73,7 @@ By default the item count assumes a list. To expand based on other children, suc
 ```diff
 -	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2">
 +	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2" data-o-expander-item-selector="p">
-		<h2>Collapsing to number of items in a list</h2>
+		<h2>Collapsing content to a number of paragraphs</h2>
 		<div class="o-expander__content">
 			<p>item</p>
 			<p>item</p>
@@ -91,7 +92,7 @@ The expander may also toggle the visibility of `o-expander__content` entirely. S
 ```diff
 -	<div data-o-component="o-expander" class="o-expander">
 +	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="hidden">
-		<h2>Collapsing to number of items in a list</h2>
+		<h2>Collapsing all content</h2>
 		<div class="o-expander__content">
 			<!-- Some content to entirely hide/show. -->
 		</div>
@@ -99,17 +100,105 @@ The expander may also toggle the visibility of `o-expander__content` entirely. S
 	</div>
 ```
 
+### Toggle Text
+
+All expanders update toggle text when the expander is toggled. To customise default copy, set `data-o-expander-collapsed-toggle-text` and `data-o-expander-expanded-toggle-text` to set the text of your expander toggles when collapsed/expanded respectively.
+
+```diff
+-	<div data-o-component="o-expander" class="o-expander">
+ 	<div
++   data-o-component="o-expander"
++   class="o-expander"
++   data-o-expander-collapsed-toggle-text="Show more of this please!"
++   data-o-expander-expanded-toggle-text="Less of this please!">
+		<div class="o-expander__content">
+			<!-- Some content to expand -->
+		</div>
+    <!-- This toggle text will update when be "Show more of this please!" when the expander initialises. -->
+    <!-- And "Less of this please!" when the user expands the expander. -->
+		<button class="o-expander__toggle">Toggle</button>
+	</div>
+```
+
+If you would not like toggle text to be updated set `data-o-expander-collapsed-toggle-text` to "aria". The toggle's `aria-expanded` will still be updated but its copy won't. If you would not like the toggle aria to update either set to "none".
+
+```diff
+-	<div data-o-component="o-expander" class="o-expander">
++	<div data-o-component="o-expander" class="o-expander" data-o-expander-collapsed-toggle-state="none">
+		<div class="o-expander__content">
+			<!-- Some content to expand -->
+		</div>
+    <!-- This toggle text will not change. -->
+		<button class="o-expander__toggle">Toggle</button>
+	</div>
+```
+
 ## JavaScript
 
-### Static methods
+No JavaScript will run automatically unless you are using the Build Service. You must either construct an `o-expander` object or fire an o.DOMContentLoaded event, which `o-expander` listens for.
 
-#### `init(el, opts)`
-This generally sticks to the [usual origami convention](http://origami.ft.com/docs/syntax/js/#initialisation). If `el` is an HTMLElement with the attribute `data-o-component="o-expander"` a single instance will be created for that element and returned, otherwise an expander will be created for each `o-expander` element found within `el`, and an array of instances returned.
+### Construction
 
-### Instance methods
+If you have set up your expander declaratively, use the following to initialise all expanders on the page with the `data-o-component="o-expander"` attribute:
+```js
+const Expander = require('o-expander');
+Expander.init();
+```
 
-#### `destroy()`
-Destroys an o-expander instance and removes all event listeners
+Or initialise a specific declarative expander:
+```js
+const Expander = require('o-expander');
+const myExpanderElement = document.querySelector('my-expander');
+const myExpander = new Expander(myExpanderElement);
+```
+
+All declarative options set via [Markup](#markup) may also be passed as an `opts` object. See the [options section](#options) for a full list. e.g:
+```js
+const Expander = require('o-expander');
+const myExpanderElement = document.querySelector('my-expander');
+const myExpander = new Expander(myExpanderElement, {
+  shrinkTo: 4,
+  itemSelecor: 'p'
+});
+```
+
+#### Options
+
+All the following can be passed to JavaScript or may be set declaratively via [Markup](#markup) as data-attributes (hyphenated and prefixed by `o-expander` e.g. `data-o-expander-shrink-to="height"`):
+
+- `shrinkTo` [`height`]: The expander collapse method, "height", "hidden", or a number of items.
+- `itemSelector` [`li`]: A selector for items to count when  `shrinkTo` is set to a number, relative to `.o-expander__content`.
+- `expandedToggleText` [`less|fewer`]: Toggle text for when the expander is collapsed. Defaults to "fewer", or "less" when `shrinkTo` is "height", or "hidden" when `shrinkTo` is "hidden".
+- `collapsedToggleText` [`more`]: Toggle text for when the expander is collapsed. Defaults to "more", or "show" when `shrinkTo` is "hidden".
+- `toggleState` [`all|aria|none`]: How to update the expander toggles: "all" to update text and aria-expanded attributes, "aria" to update only aria-expanded attributes, "none" to avoid updating toggles on click.
+
+### Custom Expander
+
+`o-expander` may be used to create a custom expander without `o-expander` CSS. This is useful if you need the functionality of `o-expander` but a custom UI. E.g. `o-expander` sets `display: none` on collapsible items by default, but you may wish to animate them.
+
+To create a custom expander call the static `createCustom` method. The `createCustom` method accepts the [same options](#options) as the `init` method except `itemSelector`. Instead of `itemSelector` it accepts two extra objects, `selectors` and `classnames`, to customise all CSS selectors and classes.
+
+```js
+const Expander = require('o-expander');
+const myExpanderElement = document.querySelector('my-expander');
+const myCustomExpander = Expander.createCustom(myExpanderElement, {
+  shrinkTo: 4,
+  selectors: {
+    toggle: '.my-expander__toggle', // The toggles within o-expander.
+    content: '.my-expander__content', // The content within o-expander which is expandable.
+    item: 'li', // The items within o-expander to count, when `shrinkTo` is set to a number.
+  },
+  classnames: {
+    initialised: 'my-expander--initialised', // Added to the expander element when JS is initialised.
+    inactive: 'my-expander--inactive', // Added to the expander element if the expander doesn't need to contract/expand.
+    expanded: 'my-expander__content--expanded', // Added to the content element when expanded.
+    collapsed: 'my-expander__content--collapsed', // Added to the content element when collapsed.
+    collapsibleItem: 'my-expander__collapsible-item' // Added to item elements which are hidden when collapsed.
+  }
+});
+```
+
+See [o-exapnder JSDocs](https://registry.origami.ft.com/components/o-expander/jsdoc) for more details.
 
 ### Events
 
@@ -136,19 +225,6 @@ o-expander fires the following events, which always fire before any repainting/l
     ```
 
   * Animation and other fancy behaviour can be added using css and by listening to the events outlined above.
-
-## Options
-
-All the following can be passed in an options object in the second parameter of `oExpander#init()` or as data-attributes (hyphenated and prefixed by `o-expander` e.g. `data-o-expander-shrink-to="height"`)
-
-  * `shrinkTo` [`'height'`]: A non-negative integer, indicating the number of items to show when collapsed, or the string `'height'`, which will collapse to a max-height defined in the CSS, or `'hidden'` which will use `aria-hidden` (rather than `aria-expanded`) to completely hide the content when collapsed
-  * `countSelector` [`'.o-expander__content > li'`]: Selector for identifying items to count, relative to `.o-expander`
-  * `expandedToggleText` [`'less|fewer'`]: Text to show on toggle link or button when expanded (defaults to fewer when in count mode, or less when in height mode). Accepts empty strings
-  * `collapsedToggleText` [`'more'`]: Text to show on toggle link or button when collapsed. Accepts empty strings
-  * `toggleSelector`[`'.o-expander__toggle'`]: Selector for expand/collapse toggle link or button. When using the default selector some styling, with an arrow icon, will come for free. If the selector matches more than one element they will all have the ability to expand/collapse the expander
-  * `contentClassName` [`'o-expander__content'`]: Class name used in the content element of the component
-  * `toggleClassName` [`'o-expander__toggle'`]: Class name used in the toggle element of the component
-  * `toggleState`[`'all|aria|none'`]: Do you want the expander to update the link or button's text and `aria-expanded` attribute, just the aria attribute or neither (defaults to `all`)
 
 ## Migration
 

@@ -1,6 +1,6 @@
 # o-expander [![Build Status](https://circleci.com/gh/Financial-Times/o-expander.png?style=shield&circle-token=0342cb593ceeb278037288a5f7a4745990b9517b)](https://circleci.com/gh/Financial-Times/o-expander) [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](#licence)
 
-Accessible, content-aware component for expanding and collapsing content. Based on content height or number of items.
+Accessible, content-aware component for expanding and collapsing content.
 
 - [Markup](#markup)
 - [JavaScript](#javascript)
@@ -11,13 +11,76 @@ Accessible, content-aware component for expanding and collapsing content. Based 
 
 ## Markup
 
+The  `o-expander` component has a content element `o-expander__content` (the DOM to expand and collapse) and toggle elements `o-expander__toggle` (the triggers to toggle the expander).
+
+`o-expander__toggle` and `o-expander__content` can be put anywhere within `o-expander` as long as `o-expander__toggle` is not contained within `o-expander__content`. There are no restrictions on sibling markup.
+
 ```html
 <div data-o-component="o-expander" class="o-expander">
-    <div class="o-expander__content"></div>
-    <a class="o-expander__toggle"></a>
+    <div class="o-expander__content">
+      <!-- Some content to expand and collapse. -->
+    </div>
+    <button class="o-expander__toggle">Toggle Content</button>
 </div>
 ```
-`o-expander__toggle` and `o-expander__content` can be put anywhere within `o-expander` as long as `o-expander__toggle` is not contained within `o-expander__content`. There are no restrictions on sibling markup.
+
+### Height Expander
+
+By default the expander is based on height. Set the `max-height` of your collapsed expander using a custom class like `my-example-expander` below. `o-expander` will remove your `max-height` when the toggle is clicked to expand the expander.
+
+```diff
+-<div data-o-component="o-expander" class="o-expander">
++<div data-o-component="o-expander" class="o-expander my-example-expander">
+    <div class="o-expander__content">
+      <!-- Some content to expand and collapse. -->
+    </div>
+    <button class="o-expander__toggle">Toggle Content</button>
+</div>
+```
+
+```css
+// Set the height to 30% the viewport width (this is for demo purposes and could
+// be any height). Only apply a max-height when the expander has the
+// `o-expander--initialised` class for progressive enhancement, so when
+// JavaScript fails content isn't hidden.
+.o-expander--initialised.my-example-expander {
+  max-height: 30vh;
+}
+```
+
+### Item Count Expander
+
+The expander may also be based on the number of items within `o-expander__content`. For example, to show only two items within a list: Set `o-expander__content` on your collapsing list (`ul` or `ol`), and specify the number of items to collapse to with the `data-o-expander-shrink-to` data attribute.
+
+```diff
+-	<div data-o-component="o-expander" class="o-expander">
++	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2">
+		<h2>Collapsing to number of items in a list</h2>
+		<ul class="o-expander__content">
+			<li>item</li>
+			<li>item</li>
+			<li>item</li> // hidden when collapsed
+			<li>item</li> // hidden when collapsed
+			<li>item</li> // hidden when collapsed
+		</ul>
+		<button class="o-expander__toggle">Toggle Content</button>
+	</div>
+```
+
+### Hidden Expander
+
+The expander may also toggle the visibility of `o-expander__content` entirely. Set `data-o-expander-shrink-to` to `hidden`.
+
+```diff
+-	<div data-o-component="o-expander" class="o-expander">
++	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="hidden">
+		<h2>Collapsing to number of items in a list</h2>
+		<div class="o-expander__content">
+			<!-- Some content to entirely hide/show. -->
+		</div>
+		<button class="o-expander__toggle">Toggle Content</button>
+	</div>
+```
 
 ## JavaScript
 

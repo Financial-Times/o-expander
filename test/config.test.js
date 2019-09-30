@@ -85,7 +85,7 @@ describe("Expander", () => {
 		}, 100);
 	});
 
-	it('should apply the collapsable item class when "shrinkTo" is a number of items', (done) => {
+	it('should apply the collapsable item class and aria-hidden attribute when "shrinkTo" is a number of items', (done) => {
 		// Setup test.
 		fixtures.manualInit();
 		const shrinkTo = 3;
@@ -109,6 +109,9 @@ describe("Expander", () => {
 				`the expected number of items. Found ${collapsableItems.length} ` +
 				`expected ${expectedLength}.`
 			);
+			collapsableItems.forEach(item => {
+				proclaim.equal(item.getAttribute('aria-hidden'), 'false');
+			});
 			done();
 		}, 100);
 	});

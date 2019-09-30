@@ -152,8 +152,7 @@ class ExpanderUtility {
 			this.oExpanderElement.classList.remove(this.options.classnames.inactive);
 			// Mark collapsible items with the `o-expander__collapsible-item` classnames.
 			if (typeof this.options.shrinkTo === 'number') {
-				const allCountElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
-				const collapsibleCountElements = Array.from(allCountElements).splice(this.options.shrinkTo);
+				const collapsibleCountElements = this._getCollapseableItems();
 				collapsibleCountElements.forEach(el => el.classList.add(this.options.classnames.collapsibleItem));
 			}
 			// Collapse or expand.
@@ -229,6 +228,20 @@ class ExpanderUtility {
 	}
 
 	/**
+	 * @returns {Array<Element>} - Collapseable items.
+	 */
+	_getCollapseableItems() {
+		if (typeof this.options.shrinkTo !== 'number') {
+			throw new Error(
+				'Can not get items which can collapse for an ' +
+				'expander which is not based on a number of items.'
+			);
+		}
+		const allCountElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
+		return Array.from(allCountElements).splice(this.options.shrinkTo);
+	}
+
+	/**
 	 * Return whether the expander has something to hide / show.
 	 * i.e. if expanding/collapsing would do anything.
 	 * @returns {Boolean}
@@ -268,15 +281,22 @@ class ExpanderUtility {
 	_setExpandedState(state, isSilent) {
 		// Record the current state of the expander.
 		this._currentState = state;
-		// If not hiding elements set the expanded and collapsed classes.
-		if (this.options.shrinkTo !== 'hidden') {
-			this.contentElement.classList.toggle(this.options.classnames.expanded, state === 'expand');
-			this.contentElement.classList.toggle(this.options.classnames.collapsed, state !== 'expand');
-		}
-		// If hiding elements set `aria-hidden`.
+		// Toggle expanded and collapsed classes.
+		this.contentElement.classList.toggle(this.options.classnames.expanded, state === 'expand');
+		this.contentElement.classList.toggle(this.options.classnames.collapsed, state !== 'expand');
+		// Set `aria-hidden`.
+		const ariaHidden = state === 'expand' ? 'false' : 'true';
+		// If toggling all content set `aria-hidden` on the content element.
 		if (this.options.shrinkTo === 'hidden') {
-			const value = state === 'expand' ? 'false' : 'true';
-			this.contentElement.setAttribute('aria-hidden', value);
+			this.contentElement.setAttribute('aria-hidden', ariaHidden);
+		}
+		// If toggling elements based on the number of items, set `aria-hidden`
+		// on collapseable items.
+		if (typeof this.options.shrinkTo === 'number') {
+			const collapsibleCountElements = this._getCollapseableItems();
+			collapsibleCountElements.forEach(el =>
+				el.setAttribute('aria-hidden', ariaHidden)
+			);
 		}
 		// Set the toggle text and `aria-expanded` attribute.
 		if (this.options.toggleState !== 'none') {

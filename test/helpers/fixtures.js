@@ -21,7 +21,7 @@ function insert(html) {
 
 function simple () {
 	const html = `
-	<div data-o-component="o-expander" class="o-expander items" data-o-expander-shrink-to="2" data-o-expander-count-selector="li" id="element">
+	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2" id="element">
 		<h2>Collapsing to number of items in a list</h2>
 		<ul class="o-expander__content">
 			<li>item</li>
@@ -84,8 +84,25 @@ function custom () {
 	insert(html);
 }
 
+function numberItemSelector () {
+	const html = `
+	<div id="expander" data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2" data-o-expander-item-selector="p" id="element">
+		<h2>Collapsing to number of items in a list</h2>
+		<div id="expander-content" class="o-expander__content">
+			<p>item</p>
+			<p>item</p>
+			<p>item</p>
+			<p>item</p>
+		</div>
+		<a id="expander-toggle" href='#' class="o-expander__toggle click-for-testing"></a>
+	</div>
+	`;
+	insert(html);
+}
+
 export {
 	custom,
+	numberItemSelector,
 	manualInit,
 	simple,
 	reset

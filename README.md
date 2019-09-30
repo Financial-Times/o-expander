@@ -59,10 +59,27 @@ The expander may also be based on the number of items within `o-expander__conten
 		<ul class="o-expander__content">
 			<li>item</li>
 			<li>item</li>
-			<li>item</li> // hidden when collapsed
-			<li>item</li> // hidden when collapsed
-			<li>item</li> // hidden when collapsed
+			<li>item</li> //hidden when collapsed
+			<li>item</li> //hidden when collapsed
+			<li>item</li> //hidden when collapsed
 		</ul>
+		<button class="o-expander__toggle">Toggle Content</button>
+	</div>
+```
+
+By default the item count assumes a list. To expand based on other children, such as paragraph `p` elements set `data-o-expander-item-selector`. E.g.
+
+```diff
+-	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2">
++	<div data-o-component="o-expander" class="o-expander" data-o-expander-shrink-to="2" data-o-expander-item-selector="p">
+		<h2>Collapsing to number of items in a list</h2>
+		<div class="o-expander__content">
+			<p>item</p>
+			<p>item</p>
+			<p>item</p> //hidden when collapsed
+			<p>item</p> //hidden when collapsed
+			<p>item</p> //hidden when collapsed
+		</div>
 		<button class="o-expander__toggle">Toggle Content</button>
 	</div>
 ```

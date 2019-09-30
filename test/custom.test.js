@@ -15,7 +15,7 @@ describe("Expander", () => {
 				selectors: {
 					toggle: '.my-expander__toggle',
 					content: '.my-expander__content',
-					contentItem: '.my-expander__content > li',
+					item: '.my-expander__content > li',
 				},
 				classnames: {
 					initialised: 'my-expander--initialised',
@@ -65,13 +65,13 @@ describe("Expander", () => {
 			// Select and init expander.
 			const expanderElement = document.getElementById('expander');
 			// Init custom expander, with missing config.
-			delete customConfig.selectors.contentItem;
+			delete customConfig.selectors.item;
 			proclaim.throws(() => {
 				Expander.createCustom(expanderElement, customConfig);
 			}, /Expected the following "selectors"/);
 		});
 
-		it('`classnames.collapsibleItem` and `selectors.contentItem` are not required when `shrinkTo` is a number.', () => {
+		it('`classnames.collapsibleItem` and `selectors.item` are not required when `shrinkTo` is a number.', () => {
 			// Setup test.
 			fixtures.custom();
 			// Select and init expander.
@@ -80,7 +80,7 @@ describe("Expander", () => {
 			// `shrinkTo` is set to a number.
 			customConfig.shrinkTo = 'height';
 			delete customConfig.classnames.collapsibleItem;
-			delete customConfig.classnames.contentItem;
+			delete customConfig.classnames.item;
 			try {
 				Expander.createCustom(expanderElement, customConfig);
 			} catch (error) {

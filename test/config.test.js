@@ -115,4 +115,37 @@ describe("Expander", () => {
 			done();
 		}, 100);
 	});
+
+	it('should apply the collapsable item class and aria-hidden attribute when "shrinkTo" is a number of items and `itemSelector` is "p"', (done) => {
+		// Setup test.
+		fixtures.numberItemSelector();
+		const shrinkTo = 3;
+		const itemSelector = 'p';
+		// Select and init expander.
+		const expanderElement = document.getElementById('expander');
+		new Expander(expanderElement, {
+			shrinkTo,
+			itemSelector
+		});
+		// Confirm `shrinkTo` config works as expected.
+		document.getElementById('expander-toggle').click();
+		setTimeout(function(){
+			const collapsableItems = expanderElement.querySelectorAll('.o-expander__collapsible-item');
+			const allItems = expanderElement.querySelectorAll(itemSelector);
+			// Number of items with the collapsable class should be the total
+			// number minus the number of items to shrink to.
+			const expectedLength = allItems.length - shrinkTo;
+			proclaim.equal(
+				collapsableItems.length,
+				expectedLength,
+				`Did not apply the ".o-expander__collapsible-item" class to ` +
+				`the expected number of items. Found ${collapsableItems.length} ` +
+				`expected ${expectedLength}.`
+			);
+			collapsableItems.forEach(item => {
+				proclaim.equal(item.getAttribute('aria-hidden'), 'false');
+			});
+			done();
+		}, 100);
+	});
 });

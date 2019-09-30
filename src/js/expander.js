@@ -8,11 +8,16 @@ class Expander extends ExpanderUtility {
 	 * @param {Object} [opts={}] - An options object for configuring the component
 	 */
 	constructor (oExpanderElement, opts) {
-		super(oExpanderElement, Object.assign({
+		// Get user configuration.
+		const userOptions = opts || Expander._getDataAttributes(oExpanderElement);
+		// Initialise with user options and o-expander classes and selectors.
+		// Only `selectors.item`, which is not o-expander specific, is
+		// configurable by the user with the `itemSelector` option.
+		super(oExpanderElement, Object.assign(userOptions, {
 			selectors: {
 				toggle: '.o-expander__toggle',
 				content: '.o-expander__content',
-				contentItem: '.o-expander__content > li',
+				item: userOptions.itemSelector || 'li',
 			},
 			classnames: {
 				initialised: 'o-expander--initialised',
@@ -21,7 +26,7 @@ class Expander extends ExpanderUtility {
 				collapsed: 'o-expander__content--collapsed',
 				collapsibleItem: 'o-expander__collapsible-item'
 			}
-		}, opts || Expander._getDataAttributes(oExpanderElement)));
+		}));
 	}
 
 	/**

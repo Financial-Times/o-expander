@@ -37,11 +37,11 @@ class ExpanderUtility {
 		}
 
 		// Validate the required selectors are configured.
-		// The `contentItem` selector is only required if this expander is a
+		// The `item` selector is only required if this expander is a
 		// "number" expander, i.e. based on the number of visible content items.
 		const requiredSelectors = ['toggle', 'content'];
 		if (typeof this.options.shrinkTo === 'number') {
-			requiredSelectors.push(`contentItem`);
+			requiredSelectors.push(`item`);
 		}
 		const actualSelectors = Object.keys(opts.selectors);
 		const missingSelectors = requiredSelectors.filter(s => actualSelectors.indexOf(s) === -1);
@@ -228,17 +228,24 @@ class ExpanderUtility {
 	}
 
 	/**
-	 * @returns {Array<Element>} - Collapseable items.
+	 * @returns {Array<Element>} - All collapseable content items.
 	 */
 	_getCollapseableItems() {
+		const allCountElements = this._getItems();
+		return Array.from(allCountElements).splice(this.options.shrinkTo);
+	}
+
+	/**
+	 * @returns {Array<Element>} - All content items.
+	 */
+	_getItems() {
 		if (typeof this.options.shrinkTo !== 'number') {
 			throw new Error(
-				'Can not get items which can collapse for an ' +
-				'expander which is not based on a number of items.'
+				'Can not get items for an expander which is not based on a ' +
+				'number of items.'
 			);
 		}
-		const allCountElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
-		return Array.from(allCountElements).splice(this.options.shrinkTo);
+		return this.contentElement.querySelectorAll(this.options.selectors.item);
 	}
 
 	/**
@@ -256,8 +263,8 @@ class ExpanderUtility {
 		// collapse if the items length exceeds the number to shrink to. I.e.
 		// a list of 2 can't collapse to 5.
 		if (typeof this.options.shrinkTo === 'number') {
-			const expandableElements = this.oExpanderElement.querySelectorAll(this.options.selectors.contentItem);
-			return expandableElements.length > this.options.shrinkTo;
+			const items = this._getItems();
+			return items.length > this.options.shrinkTo;
 		}
 		// If the expander is based on a height then check the content overflows
 		// the content container.

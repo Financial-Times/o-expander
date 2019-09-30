@@ -15,8 +15,8 @@ class Expander extends ExpanderUtility {
 				contentItem: '.o-expander__content > li',
 			},
 			classnames: {
-				initialised: 'o-expander__content--initialised',
-				inactive: 'o-expander__content--inactive',
+				initialised: 'o-expander--initialised',
+				inactive: 'o-expander--inactive',
 				expanded: 'o-expander__content--expanded',
 				collapsed: 'o-expander__content--collapsed',
 				collapsibleItem: 'o-expander__collapsible-item'

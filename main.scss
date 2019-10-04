@@ -1,6 +1,7 @@
 @import "o-icons/main";
 @import 'src/scss/variables';
 
+/// @outputs All o-expander CSS, including the expander content area and toggle.
 @mixin oExpander() {
 	// Hide content when aria-hidden is applied.
 	.o-expander__content[aria-hidden="true"] {

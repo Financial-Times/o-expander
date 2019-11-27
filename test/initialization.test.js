@@ -49,4 +49,40 @@ describe("Expander", () => {
 			proclaim.equal(expander instanceof Expander, true);
 		});
 	});
+
+	it('should be collapsed by default', (done) => {
+		fixtures.simple();
+		// init all expanders on the page
+		const expanders = Expander.init();
+		setTimeout(function () {
+			// check each are collapsed by default
+			expanders.forEach(e => {
+				proclaim.isTrue(e.isCollapsed());
+			});
+			done();
+		}, 100);
+	});
+
+	it('should be expanded by default given the expanded modifier class is applied', (done) => {
+		fixtures.simple();
+		// add the expander class to all expander content elements
+		const expanderContentElements = document.querySelectorAll('.o-expander__content');
+		// add the expanded class to non-hidden expanders
+		expanderContentElements
+			.filter(e => e.getAttribute('data-o-expander-shrink-to') !== 'hidden')
+			.forEach(e => e.classList.add('o-expander__content--expanded'));
+		// add the aria-hidden=false attribute to hidden expanders
+		expanderContentElements
+			.filter(e => e.getAttribute('data-o-expander-shrink-to') === 'hidden')
+			.forEach(e => e.setAttribute.add('aria-hidden'), false);
+		// init all expanders on the page
+		const expanders = Expander.init();
+		setTimeout(function () {
+			// check each are expanded
+			expanders.forEach(e => {
+				proclaim.isTrue(!e.isCollapsed());
+			});
+			done();
+		}, 100);
+	});
 });

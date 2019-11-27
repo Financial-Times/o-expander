@@ -65,22 +65,21 @@ describe("Expander", () => {
 
 	it('should be expanded by default given the expanded modifier class is applied', (done) => {
 		fixtures.simple();
-		// add the expander class to all expander content elements
-		const expanderContentElements = document.querySelectorAll('.o-expander__content');
+		const expanderContentElements = document.querySelectorAll('[data-o-component="o-expander"]');
 		// add the expanded class to non-hidden expanders
-		expanderContentElements
+		[].slice.apply(expanderContentElements)
 			.filter(e => e.getAttribute('data-o-expander-shrink-to') !== 'hidden')
-			.forEach(e => e.classList.add('o-expander__content--expanded'));
+			.forEach(e => e.querySelector('.o-expander__content').classList.add('o-expander__content--expanded'));
 		// add the aria-hidden=false attribute to hidden expanders
-		expanderContentElements
+		[].slice.apply(expanderContentElements)
 			.filter(e => e.getAttribute('data-o-expander-shrink-to') === 'hidden')
-			.forEach(e => e.setAttribute.add('aria-hidden'), false);
+			.forEach(e => e.querySelector('.o-expander__content').setAttribute('aria-hidden', 'false'));
 		// init all expanders on the page
 		const expanders = Expander.init();
 		setTimeout(function () {
 			// check each are expanded
 			expanders.forEach(e => {
-				proclaim.isTrue(!e.isCollapsed());
+				proclaim.isFalse(e.isCollapsed());
 			});
 			done();
 		}, 100);

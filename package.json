@@ -12,12 +12,12 @@
     },
     "browser": "main.js",
     "peerDependencies": {
-        "@financial-times/o-icons": "^100.0.0-6",
-        "@financial-times/o-viewport": "^100.0.0-6"
+        "@financial-times/o-icons": "^100.0.0-7",
+        "@financial-times/o-viewport": "^100.0.0-7"
     },
     "description": "Content-aware helper for expanding and collapsing content or lists.",
     "publishConfig": {
         "registry": "http://localhost:4873"
     },
-    "version": "100.0.0-6"
+    "version": "100.0.0-7"
 }

@@ -1,6 +1,6 @@
 {
     "name": "@financial-times/o-expander",
-    "version": "100.0.0-7",
+    "version": "100.0.0-8",
     "description": "Content-aware helper for expanding and collapsing content or lists.",
     "license": "MIT",
     "type": "module",
@@ -22,8 +22,8 @@
         "stylelint-config-origami-component": "^1.0.4"
     },
     "peerDependencies": {
-        "@financial-times/o-icons": "^100.0.0-7",
-        "@financial-times/o-viewport": "^100.0.0-7"
+        "@financial-times/o-icons": "^100.0.0-8",
+        "@financial-times/o-viewport": "^100.0.0-8"
     },
     "publishConfig": {
         "registry": "http://localhost:4873"

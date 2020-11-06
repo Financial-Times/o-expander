@@ -1,6 +1,6 @@
 {
   "name": "@financial-times/o-expander",
-  "version": "100.0.0-11",
+  "version": "100.0.0-12",
   "description": "Content-aware helper for expanding and collapsing content or lists.",
   "keywords": [],
   "homepage": "https://github.com/Financial-Times/o-expander#readme",
@@ -33,8 +33,8 @@
     "typescript": "^4.0.5"
   },
   "peerDependencies": {
-    "@financial-times/o-icons": "^100.0.0-11",
-    "@financial-times/o-viewport": "^100.0.0-11"
+    "@financial-times/o-icons": "^100.0.0-12",
+    "@financial-times/o-viewport": "^100.0.0-12"
   },
   "publishConfig": {
     "registry": "https://origami-npm-registry-prototype.herokuapp.com"

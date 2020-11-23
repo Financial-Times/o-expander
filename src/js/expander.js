@@ -77,8 +77,8 @@ class Expander extends ExpanderUtility {
 			return {};
 		}
 		return Object.keys(oExpanderElement.dataset).reduce((options, key) => {
-			// Ignore data-o-component
-			if (key === 'oComponent') {
+			// Ignore keys which are not in the component's namespace
+			if (!key.match(/^oExpander(\w)(\w+)$/)) {
 				return options;
 			}
 			// Build a concise key and get the option value

@@ -1,5 +1,11 @@
 # o-expander
 
+***
+
+**This component has moved to the [Origami Component System](https://github.com/Financial-Times/origami).**
+
+***
+
 Accessible, content-aware component for expanding and collapsing content.
 
 - [Usage](#usage)
